@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Meeting Notes Agent - Background Recorder (Project 8)</title>
+  <!-- Single Consolidated Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="22"/>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-title">AI Meeting Notes Agent</span>
+        <span class="brand-badge">Project 8 &bull; AWS Event-Driven</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav-tabs">
+      <li><button class="nav-tab-btn active" data-tab="tab-live">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        Live Recorder & RAG
+      </button></li>
+      <li><button class="nav-tab-btn" data-tab="tab-architecture">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        AWS Architecture & CI/CD
+      </button></li>
+      <li><button class="nav-tab-btn" data-tab="tab-archive">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Meeting Archive
+      </button></li>
+    </ul>
+
+    <!-- Server Connection Status Pill -->
+    <div class="server-status-pill" id="backend-status">
+      <div class="status-dot" id="backend-dot"></div>
+      <span id="backend-text">Checking Java Server...</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- ==================================================================== -->
+    <!-- TAB 1: Live Recorder, Diarization, Action Items & RAG Assistant      -->
+    <!-- ==================================================================== -->
+    <div class="tab-content active" id="tab-live">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">8. AI Meeting Notes Agent (Background Recorder)</h1>
+          <p class="page-subtitle">Real-time background audio ingestion, speaker diarization, structured action-item extraction & RAG Q&A.</p>
+        </div>
+        <div class="sample-selector">
+          <label for="sample-meeting-select" style="font-size: 0.85rem; color: var(--text-muted);">Session Context:</label>
+          <select id="sample-meeting-select" class="select-input">
+            <option value="arch-review">Sprint Architecture Review (Alice, Bob, Charlie)</option>
+            <option value="open-claw">Project 9: OpenClaw Autonomous Coding Sync</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- LEFT COLUMN: Recorder, Diarization, and Action Items -->
+        <section>
+
+          <!-- Audio Ingestion & Waveform Visualizer -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                Audio Ingestion Pipeline (Amazon S3 / Transcribe Streaming)
+              </h2>
+              <span class="timestamp-pill" id="meeting-timer">00:00</span>
+            </div>
+
+            <div class="audio-recorder-panel">
+              <div class="recorder-controls">
+                <button class="btn btn-primary record-btn-pulse" id="record-toggle-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="7"/></svg>
+                  Start Background Recording
+                </button>
+                <button class="btn btn-secondary btn-sm" id="reset-stream-btn">Reset</button>
+                <span id="recorder-state-label" style="font-size: 0.825rem; color: var(--text-muted); margin-left: auto;">
+                  Ready to ingest audio stream
+                </span>
+              </div>
+
+              <!-- Animated Waveform Bars Container -->
+              <div class="visualizer-container" id="visualizer"></div>
+
+              <div class="recorder-stats">
+                <span>Ingest Format: <strong>16kHz Opus / WAV</strong></span>
+                <span>Diarization: <strong>Amazon Transcribe (3 Speakers)</strong></span>
+                <span id="chunk-count">0 Turns Ingested</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-Time Speaker Diarization Stream -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Live Speaker Diarization Stream
+              </h2>
+              <div style="display: flex; gap: 0.5rem;">
+                <span class="speaker-badge" style="color: var(--speaker-1); background: var(--speaker-1-bg);">Alice</span>
+                <span class="speaker-badge" style="color: var(--speaker-2); background: var(--speaker-2-bg);">Bob</span>
+                <span class="speaker-badge" style="color: var(--speaker-3); background: var(--speaker-3-bg);">Charlie</span>
+              </div>
+            </div>
+
+            <div class="transcript-stream" id="transcript-stream">
+              <!-- Live speaker turns injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Extracted Action Items & Key Decisions -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Extracted Action Items & Key Decisions (Bedrock LLM)
+              </h2>
+              <span class="brand-badge">DynamoDB Synced</span>
+            </div>
+
+            <div class="action-item-list" id="action-items-container" style="margin-bottom: 1.25rem;">
+              <!-- Action items populated dynamically -->
+            </div>
+
+            <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem;">
+              Structured JSON Output (Bedrock Model Schema):
+            </div>
+            <pre class="json-viewer" id="action-items-json">Extracting structured JSON...</pre>
+          </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: RAG Assistant & AWS Pipeline Simulator -->
+        <section>
+
+          <!-- RAG Q&A Assistant -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                RAG Q&A Assistant (Bedrock & OpenSearch)
+              </h2>
+              <span class="brand-badge">Vector Search</span>
+            </div>
+
+            <div class="rag-chat-container">
+              <div class="rag-messages" id="rag-messages">
+                <div class="rag-msg agent">
+                  Hello! I am your AI Meeting Agent. I maintain indexed vector embeddings of your meeting transcripts in OpenSearch Serverless, preserving speaker and timestamp attribution. Ask me anything about past decisions or who said what!
+                </div>
+              </div>
+
+              <!-- Preset Query Shortcuts -->
+              <div class="preset-queries">
+                <button class="preset-pill">How does the async event pipeline work?</button>
+                <button class="preset-pill">What did Bob say about speaker diarization?</button>
+                <button class="preset-pill">What are the CI/CD and DLQ requirements?</button>
+                <button class="preset-pill">Where are action items stored and emailed?</button>
+              </div>
+
+              <div class="rag-input-box">
+                <input type="text" id="rag-input" class="rag-input" placeholder="Ask about past meetings, speakers, or decisions...">
+                <button class="btn btn-primary" id="rag-send-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Asynchronous Event Pipeline Flow -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                Event-Driven Pipeline Overview
+              </h2>
+              <button class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-tab=tab-architecture]').click()">Full Spec</button>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Decoupled async architecture: S3 event notifications trigger EventBridge & Lambda without holding synchronous HTTP connections.
+            </p>
+
+            <div class="pipeline-flow">
+              <div class="pipeline-node" id="node-s3">
+                <div class="node-icon">📦</div>
+                <div class="node-name">Amazon S3</div>
+                <div class="node-desc">Raw Audio</div>
+              </div>
+              <div class="pipeline-connector">→</div>
+
+              <div class="pipeline-node" id="node-eventbridge">
+                <div class="node-icon">⚡</div>
+                <div class="node-name">EventBridge</div>
+                <div class="node-desc">Async Router</div>
+              </div>
+              <div class="pipeline-connector">→</div>
+
+              <div class="pipeline-node" id="node-transcribe">
+                <div class="node-icon">🎙️</div>
+                <div class="node-name">Transcribe</div>
+                <div class="node-desc">Diarization</div>
+              </div>
+              <div class="pipeline-connector">→</div>
+
+              <div class="pipeline-node" id="node-bedrock">
+                <div class="node-icon">🧠</div>
+                <div class="node-name">Bedrock</div>
+                <div class="node-desc">RAG & JSON</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" id="trigger-pipeline-btn">Simulate 8-Stage Pipeline</button>
+              <button class="btn btn-secondary btn-sm" id="trigger-dlq-btn">Test DLQ Failure</button>
+            </div>
+
+            <div class="terminal-box" id="pipeline-terminal" style="margin-top: 0.75rem;">
+              Ready to simulate event pipeline.
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- TAB 2: AWS Architecture Specification & CI/CD Requirements           -->
+    <!-- ==================================================================== -->
+    <div class="tab-content" id="tab-architecture">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AWS Architecture & CI/CD Pipeline</h1>
+          <p class="page-subtitle">Deep dive into AWS services, asynchronous event flows, dead-letter queues, and CI/CD fixtures.</p>
+        </div>
+      </div>
+
+      <!-- Objective Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Objective</h2>
+        </div>
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+          A background service that records/ingests meeting audio, transcribes it in real time, and uses <strong>RAG</strong> to answer questions about past meetings or auto-generate action items and summaries.
+        </p>
+      </div>
+
+      <!-- Advanced Concepts Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Advanced Concepts Implemented</h2>
+        </div>
+        <div class="spec-grid">
+          <div class="spec-box">
+            <h3>🎙️ Streaming Audio Pipeline</h3>
+            <ul>
+              <li>Real-time WebSocket audio streaming to Amazon Transcribe</li>
+              <li>Opus/WAV 16kHz chunking with low latency buffers</li>
+              <li>Graceful handling of pauses and background silence</li>
+            </ul>
+          </div>
+          <div class="spec-box">
+            <h3>👥 Speaker Diarization</h3>
+            <ul>
+              <li>Identify distinct speaker voices (Alice, Bob, Charlie)</li>
+              <li>Assign start/end timestamps and confidence scores</li>
+              <li>Maintain speaker attribution across pauses</li>
+            </ul>
+          </div>
+          <div class="spec-box">
+            <h3>🧩 Preserved Context Chunking</h3>
+            <ul>
+              <li>Chunks format: <code>[timestamp] Speaker: utterance</code></li>
+              <li>Preserves conversational boundaries for accurate RAG retrieval</li>
+              <li>Embeddings stored in OpenSearch Serverless vector index</li>
+            </ul>
+          </div>
+          <div class="spec-box">
+            <h3>📋 Structured LLM Output</h3>
+            <ul>
+              <li>Prompting Amazon Bedrock Claude 3.5 with strict JSON schemas</li>
+              <li>Extraction of Action Items with task, assignee, and priority</li>
+              <li>Syncing decisions directly into Amazon DynamoDB</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- AWS Services Mapping Table -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">AWS Architecture & Services Mapping</h2>
+        </div>
+        <div class="table-responsive">
+          <table class="aws-table">
+            <thead>
+              <tr>
+                <th>AWS Service</th>
+                <th>Purpose in this Project</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="service-tag">Amazon Transcribe</span></td>
+                <td>Speech-to-text with speaker diarization</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">Amazon S3</span></td>
+                <td>Store raw audio + generated transcripts</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">AWS Lambda</span></td>
+                <td>Trigger transcription on upload, post-process transcript</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">Amazon Bedrock</span></td>
+                <td>Summarization, action-item extraction, RAG Q&A over past meetings</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">OpenSearch Serverless / Bedrock Knowledge Base</span></td>
+                <td>Vector store of meeting transcripts</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">EventBridge</span></td>
+                <td>Orchestrate the async pipeline (upload &rarr; transcribe &rarr; summarize &rarr; index)</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">DynamoDB</span></td>
+                <td>Meeting metadata, action items, calendar links</td>
+              </tr>
+              <tr>
+                <td><span class="service-tag">SNS / SES</span></td>
+                <td>Email meeting summaries to participants after processing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CI/CD & Reliability -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">CI/CD Pipeline & Reliability Requirements</h2>
+        </div>
+        <div class="spec-grid">
+          <div class="spec-box">
+            <h3>🧪 Regression Testing Fixtures</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              CI pipeline includes sample audio fixtures (WAV files of synthetic conversations) to regression-test the transcription-to-summary pipeline and verify action-item extraction accuracy.
+            </p>
+          </div>
+          <div class="spec-box">
+            <h3>🚨 Dead-Letter Queues (DLQ)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              DLQ tested in CI to ensure failed transcription jobs (corrupted audio, timeout, quota limits) are retried 3 times, alerted via CloudWatch/SNS, and not silently dropped.
+            </p>
+          </div>
+          <div class="spec-box">
+            <h3>👥 Shadow Pipeline Deployment</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Staged deploys with a shadow pipeline that processes real meetings without sending summaries, to validate transcription accuracy and RAG quality before final cutover.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- TAB 3: Meeting Archive & Indexed Knowledge Base                      -->
+    <!-- ==================================================================== -->
+    <div class="tab-content" id="tab-archive">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Meeting Archive & Knowledge Base</h1>
+          <p class="page-subtitle">Historical meetings indexed in OpenSearch Serverless with full dialogue turns and speaker timestamps.</p>
+        </div>
+      </div>
+
+      <!-- Meeting 1 Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="brand-badge" style="margin-left: 0; margin-bottom: 0.4rem; display: inline-block;">INDEXED & VERIFIED</span>
+            <h2 class="card-title">Sprint Architecture Review: AI Meeting Notes Agent</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Date: 2026-10-14 &bull; Duration: 22m 15s &bull; Participants: Alice (Cloud Architect), Bob (ML Engineer), Charlie (DevOps Lead)
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 0.75rem;">
+          <strong>Executive Summary:</strong> Finalized the asynchronous event-driven cloud architecture using Amazon S3, EventBridge, Lambda, Amazon Transcribe with speaker diarization, Amazon Bedrock Knowledge Base with OpenSearch Serverless, and SES for participant email distribution. Established CI/CD requirements including audio fixtures and DLQ alerting.
+        </p>
+        <div style="font-size: 0.8rem; color: var(--text-subtle); font-family: var(--font-mono);">
+          Indexed in OpenSearch: 6 speaker-attributed timestamped chunks &bull; DynamoDB Session ID: meeting-001
+        </div>
+      </div>
+
+      <!-- Meeting 2 Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="brand-badge" style="margin-left: 0; margin-bottom: 0.4rem; display: inline-block;">ARCHIVED</span>
+            <h2 class="card-title">Project 9: OpenClaw Autonomous Coding Agent Sync</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Date: 2026-10-12 &bull; Duration: 15m 40s &bull; Participants: Dana (Agent Lead), Evan (Systems Engineer)
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 0.75rem;">
+          <strong>Executive Summary:</strong> Discussed implementation of Plan-Execute-Observe loop for autonomous coding agents, sandbox execution environments, and checkpointing mechanisms.
+        </p>
+        <div style="font-size: 0.8rem; color: var(--text-subtle); font-family: var(--font-mono);">
+          Indexed in OpenSearch: 2 speaker-attributed timestamped chunks &bull; DynamoDB Session ID: meeting-002
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>AI Meeting Notes Agent (Background Recorder) &bull; Project 8 Complete Architecture</div>
+    <div class="footer-links">
+      <a href="#" onclick="document.querySelector('[data-tab=tab-live]').click(); return false;">Live Recorder</a>
+      <a href="#" onclick="document.querySelector('[data-tab=tab-architecture]').click(); return false;">AWS Architecture</a>
+      <a href="#" onclick="document.querySelector('[data-tab=tab-archive]').click(); return false;">Meeting Archive</a>
+    </div>
+  </footer>
+
+  <!-- Single Master JavaScript Client -->
+  <script src="app.js"></script>
+</body>
+</html>

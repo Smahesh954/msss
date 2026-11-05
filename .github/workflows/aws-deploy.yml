@@ -1,0 +1,29 @@
+name: AI Meeting Notes Agent CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate Lambda Python syntax
+        run: python -m py_compile lambda_function.py
+
+      - name: Validate configuration JSON
+        run: |
+          python -c "import json,glob; [json.load(open(f)) for f in glob.glob('*.json')]; print('JSON validation passed')"

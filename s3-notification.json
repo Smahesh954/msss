@@ -1,0 +1,1 @@
+{"LambdaFunctionConfigurations":[{"Id":"MeetingTranscriptUploadTrigger","LambdaFunctionArn":"REPLACE_WITH_LAMBDA_ARN","Events":["s3:ObjectCreated:*"],"Filter":{"Key":{"FilterRules":[{"Name":"prefix","Value":"transcripts/"},{"Name":"suffix","Value":".txt"}]}}}]}

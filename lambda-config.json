@@ -1,0 +1,12 @@
+{
+  "FunctionName": "MeetingTranscriptProcessor",
+  "Runtime": "python3.12",
+  "Handler": "lambda_function.lambda_handler",
+  "Timeout": 30,
+  "MemorySize": 256,
+  "Environment": {
+    "Variables": {
+      "BUCKET_NAME": "ai-meeting-notes-aws-920887851127"
+    }
+  }
+}

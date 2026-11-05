@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Archive & Knowledge Base - AI Meeting Notes Agent</title>
+  <!-- Separate CSS Files -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-title">AI Meeting Notes Agent</span>
+        <span class="brand-badge">DynamoDB Archive</span>
+      </div>
+    </a>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Live Recorder</a></li>
+        <li><a href="architecture.html" class="nav-link">AWS Architecture & CI/CD</a></li>
+        <li><a href="history.html" class="nav-link active">Meeting Archive</a></li>
+      </ul>
+    </nav>
+
+    <div class="server-status-pill" id="backend-status">
+      <div class="status-dot" id="backend-dot"></div>
+      <span id="backend-text">Checking Java Server...</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Meeting Archive & Knowledge Base</h1>
+        <p class="page-subtitle">Indexed meetings in OpenSearch Serverless with speaker-attributed transcript search.</p>
+      </div>
+      <div>
+        <input type="text" id="archive-filter" class="select-input" placeholder="Filter archive by topic or speaker..." style="width: 280px;">
+      </div>
+    </div>
+
+    <!-- Meetings List -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Meeting Card 1 -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="brand-badge" style="margin-left: 0; margin-bottom: 0.4rem; display: inline-block;">INDEXED & VERIFIED</span>
+            <h2 class="card-title">AI Meeting Notes Agent Architecture Review (Project 8)</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Date: 2026-10-14 &bull; Duration: 24 mins &bull; Attendees: Alice (Cloud Architect), Bob (ML Engineer), Charlie (DevOps Lead)
+            </div>
+          </div>
+          <a href="index.html" class="btn btn-primary btn-sm">Inspect Transcript</a>
+        </div>
+
+        <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;">
+          <strong>Executive Summary:</strong> Decided on an event-driven AWS architecture utilizing Amazon Transcribe streaming with speaker diarization, Amazon S3 + EventBridge for async orchestration, Amazon Bedrock Claude 3.5 for structured action-item extraction, and OpenSearch Serverless for RAG vector search. CI/CD requires sample audio fixtures, DLQ alerting, and shadow pipeline cutover.
+        </p>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="timestamp-pill">3 Action Items (1 Completed)</span>
+          <span class="timestamp-pill">3 Key Architectural Decisions</span>
+          <span class="timestamp-pill">SES Summary Dispatched</span>
+        </div>
+      </div>
+
+      <!-- Meeting Card 2 -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="brand-badge" style="margin-left: 0; margin-bottom: 0.4rem; display: inline-block;">INDEXED</span>
+            <h2 class="card-title">OpenClaw-style Autonomous Coding Agent Sync (Project 9)</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Date: 2026-10-12 &bull; Duration: 35 mins &bull; Attendees: Charlie (DevOps Lead), Dana (Security Lead), Bob (ML Engineer)
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="alert('Viewing archived session for OpenClaw-style Autonomous Coding Agent.')">Inspect Transcript</button>
+        </div>
+
+        <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;">
+          <strong>Executive Summary:</strong> Discussed Project 9: OpenClaw-style Autonomous Coding Agent. Agreed on implementing a plan-execute-observe loop (ReAct pattern) for autonomous task completion, sandbox container execution for untrusted code generation, and AST code modification tools.
+        </p>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="timestamp-pill">2 Action Items (All Completed)</span>
+          <span class="timestamp-pill">Sandboxed Docker Runner</span>
+          <span class="timestamp-pill">ReAct Architecture</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>AI Meeting Notes Agent (Background Recorder) &bull; Project 8 Specification</div>
+    <div class="footer-links">
+      <a href="index.html">Dashboard</a>
+      <a href="architecture.html">AWS Architecture</a>
+      <a href="history.html">Past Meetings</a>
+    </div>
+  </footer>
+
+  <!-- Separate JavaScript Files -->
+  <script src="js/app.js"></script>
+</body>
+</html>

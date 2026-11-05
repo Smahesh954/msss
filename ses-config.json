@@ -1,0 +1,1 @@
+{"Service":"Amazon SES","Region":"ap-south-1","Purpose":"Send meeting summary emails","SenderEmail":"YOUR_VERIFIED_EMAIL","RecipientEmail":"YOUR_RECIPIENT_EMAIL","Status":"NOT_CONFIGURED"}

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Architecture & CI/CD - AI Meeting Notes Agent</title>
+  <!-- Separate CSS Files -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-title">AI Meeting Notes Agent</span>
+        <span class="brand-badge">AWS Architecture Spec</span>
+      </div>
+    </a>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Live Recorder</a></li>
+        <li><a href="architecture.html" class="nav-link active">AWS Architecture & CI/CD</a></li>
+        <li><a href="history.html" class="nav-link">Meeting Archive</a></li>
+      </ul>
+    </nav>
+
+    <div class="server-status-pill" id="backend-status">
+      <div class="status-dot" id="backend-dot"></div>
+      <span id="backend-text">Checking Java Server...</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">8. AI Meeting Notes Agent (Background Recorder)</h1>
+        <p class="page-subtitle">Detailed AWS System Architecture, Async Event-Driven Flow, CI/CD Pipeline & Core Concepts</p>
+      </div>
+      <a href="index.html" class="btn btn-primary btn-sm">Launch Live Recorder</a>
+    </div>
+
+    <!-- Objective Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+          Objective
+        </h2>
+      </div>
+      <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.6;">
+        A background service that records/ingests meeting audio, transcribes it in real time, and uses <strong>RAG</strong> to answer questions about past meetings or auto-generate action items and summaries.
+      </p>
+    </div>
+
+    <!-- Interactive 8-Stage Pipeline Simulator -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Interactive Asynchronous Event-Driven Pipeline
+        </h2>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-primary btn-sm" id="trigger-pipeline-btn">Run Pipeline Simulation</button>
+          <button class="btn btn-secondary btn-sm" id="trigger-dlq-btn">Simulate DLQ Error & Alert</button>
+        </div>
+      </div>
+
+      <div class="pipeline-flow">
+        <div class="pipeline-node" id="node-s3">
+          <div class="node-icon">🪣</div>
+          <div class="node-name">Amazon S3</div>
+          <div class="node-desc">Raw Audio & Transcripts</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-eventbridge">
+          <div class="node-icon">⚡</div>
+          <div class="node-name">EventBridge</div>
+          <div class="node-desc">Async Event Bus</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-lambda">
+          <div class="node-icon">λ</div>
+          <div class="node-name">AWS Lambda</div>
+          <div class="node-desc">Trigger & Post-Process</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-transcribe">
+          <div class="node-icon">🎙️</div>
+          <div class="node-name">Amazon Transcribe</div>
+          <div class="node-desc">Streaming Diarization</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-bedrock">
+          <div class="node-icon">🤖</div>
+          <div class="node-name">Amazon Bedrock</div>
+          <div class="node-desc">Claude 3.5 Summarizer</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-opensearch">
+          <div class="node-icon">🔍</div>
+          <div class="node-name">OpenSearch Serverless</div>
+          <div class="node-desc">Vector Store (RAG)</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-dynamodb">
+          <div class="node-icon">🗄️</div>
+          <div class="node-name">Amazon DynamoDB</div>
+          <div class="node-desc">Metadata & Action Items</div>
+        </div>
+        <div class="pipeline-connector">→</div>
+
+        <div class="pipeline-node" id="node-sns">
+          <div class="node-icon">✉️</div>
+          <div class="node-name">SNS / SES</div>
+          <div class="node-desc">Email Summaries</div>
+        </div>
+      </div>
+
+      <div id="pipeline-terminal" style="background:#080c14; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem; font-family:var(--font-mono); font-size:0.8rem; max-height:160px; overflow-y:auto; margin-top:1rem;">
+        Click "Run Pipeline Simulation" to watch events route through each AWS service asynchronously.
+      </div>
+    </div>
+
+    <!-- AWS Architecture & Services Reference Table -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          AWS Architecture & Services Specification
+        </h2>
+      </div>
+
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>AWS Service</th>
+            <th>Purpose in this Project</th>
+            <th>Decoupled Architecture Implementation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Amazon Transcribe</strong></td>
+            <td>Speech-to-text with speaker diarization</td>
+            <td>Identifies separate speakers (Alice, Bob, Charlie) in streaming chunks</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon S3</strong></td>
+            <td>Store raw audio + generated transcripts</td>
+            <td>Emits ObjectCreated events; lifecycle policy archives audio to Glacier</td>
+          </tr>
+          <tr>
+            <td><strong>AWS Lambda</strong></td>
+            <td>Trigger transcription on upload, post-process transcript</td>
+            <td>Runs asynchronous micro-tasks triggered by EventBridge rules</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon Bedrock</strong></td>
+            <td>Summarization, action-item extraction, RAG Q&A over past meetings</td>
+            <td>Leverages Claude 3.5 with JSON schema enforcement</td>
+          </tr>
+          <tr>
+            <td><strong>OpenSearch Serverless / Bedrock KB</strong></td>
+            <td>Vector store of meeting transcripts</td>
+            <td>Indexes time-ordered chunks with speaker attribution embeddings</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon EventBridge</strong></td>
+            <td>Orchestrate the async pipeline (upload → transcribe → summarize → index)</td>
+            <td>Replaces synchronous request-response with pub/sub event rules</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon DynamoDB</strong></td>
+            <td>Meeting metadata, action items, calendar links</td>
+            <td>Single-table design: PK = MeetingId, SK = ActionItemId / TurnId</td>
+          </tr>
+          <tr>
+            <td><strong>Amazon SNS / SES</strong></td>
+            <td>Email meeting summaries to participants after processing</td>
+            <td>Dispatches HTML formatted executive summary within 60s of meeting end</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2 Columns: Advanced Concepts & CI/CD Pipeline Requirements -->
+    <div class="dashboard-grid">
+
+      <!-- Advanced Concepts Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Advanced Concepts You Must Learn
+          </h2>
+        </div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--primary);">✓</span>
+            <div>
+              <strong>Real-time/streaming audio transcription pipelines:</strong>
+              Handling chunked audio buffers over WebSocket / HTTP2 bi-directional streams.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--primary);">✓</span>
+            <div>
+              <strong>Speaker diarization (identifying who said what):</strong>
+              Clustering audio turns by acoustic biometric fingerprints to assign speaker identifiers.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--primary);">✓</span>
+            <div>
+              <strong>Chunking transcripts for RAG while preserving speaker/timestamp context:</strong>
+              Avoiding naive token slicing which splits sentences across speakers.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--primary);">✓</span>
+            <div>
+              <strong>Action-item and decision extraction via structured LLM output:</strong>
+              Using Bedrock tool use / JSON mode to output validated task schemas.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--primary);">✓</span>
+            <div>
+              <strong>Background/async processing architecture:</strong>
+              Event-driven pipeline decoupled from UI request-response to prevent timeouts.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- CI/CD Pipeline Requirements & Study Before You Build -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            CI/CD Pipeline & Cutover Requirements
+          </h2>
+        </div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--warning);">⚡</span>
+            <div>
+              <strong>CI pipeline with sample audio fixtures:</strong>
+              Regression-test the transcription-to-summary pipeline on every git push.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--warning);">⚡</span>
+            <div>
+              <strong>Infrastructure as Code (IaC):</strong>
+              AWS CDK / Terraform definitions for S3 Event → Lambda → Transcribe → Bedrock.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--danger);">🛡️</span>
+            <div>
+              <strong>Dead-letter queues (DLQ) tested in CI:</strong>
+              Ensures corrupt audio files or failed transcription jobs trigger SQS DLQ alerts, not silent drops.
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.5rem;">
+            <span style="color: var(--success);">🚀</span>
+            <div>
+              <strong>Staged deploys with shadow pipeline:</strong>
+              Processes real meetings in parallel without sending emails to validate summary accuracy before cutover.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>AI Meeting Notes Agent (Background Recorder) &bull; Project 8 Specification</div>
+    <div class="footer-links">
+      <a href="index.html">Dashboard</a>
+      <a href="architecture.html">AWS Architecture</a>
+      <a href="history.html">Past Meetings</a>
+    </div>
+  </footer>
+
+  <!-- Separate JavaScript Files -->
+  <script src="js/app.js"></script>
+  <script src="js/pipeline.js"></script>
+</body>
+</html>

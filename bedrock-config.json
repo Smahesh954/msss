@@ -1,0 +1,1 @@
+{"Service":"Amazon Bedrock","Region":"ap-south-1","Task":"Generate meeting summaries","Input":"Meeting transcript from S3","Output":"Meeting summary, key points, decisions, action items","ModelId":"TO_BE_SELECTED","Status":"NOT_CONFIGURED"}

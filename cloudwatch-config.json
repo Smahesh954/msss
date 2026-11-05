@@ -1,0 +1,1 @@
+{"Service":"Amazon CloudWatch","Region":"ap-south-1","LogGroup":"/aws/lambda/MeetingTranscriptProcessor","Metrics":["Invocations","Errors","Duration","Throttles"],"Alarms":{"LambdaErrors":{"MetricName":"Errors","Threshold":1,"EvaluationPeriods":1}},"Status":"NOT_CONFIGURED"}

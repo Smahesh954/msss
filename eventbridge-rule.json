@@ -1,0 +1,1 @@
+{"Name":"MeetingNotesProcessingSchedule","Description":"Schedule meeting notes processing workflow","ScheduleExpression":"rate(5 minutes)","State":"DISABLED"}

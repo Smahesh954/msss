@@ -1,0 +1,1 @@
+{"QueueName":"MeetingNotesDeadLetterQueue","Region":"ap-south-1","Attributes":{"MessageRetentionPeriod":"1209600","VisibilityTimeout":"60"},"Purpose":"Store failed meeting-processing messages","Status":"NOT_CREATED"}

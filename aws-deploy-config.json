@@ -1,0 +1,1 @@
+{"GitHubRepository":"Smahesh954/awsss","Branch":"main","AWSRegion":"ap-south-1","LambdaFunction":"MeetingTranscriptProcessor","DeploymentMethod":"GitHub Actions with AWS OIDC","Status":"WAITING_FOR_IAM_CONFIGURATION"}
